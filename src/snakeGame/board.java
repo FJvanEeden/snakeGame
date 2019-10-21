@@ -1,5 +1,6 @@
 package snakeGame;
 
+//Imports all external packages used in the class.
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -15,8 +16,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+// Creates class and implements an action listener.
 public class Board extends JPanel implements ActionListener {
 
+	// Assigns size measurements to JPanel objects. 
     private final int B_WIDTH = 300;
     private final int B_HEIGHT = 300;
     private final int DOT_SIZE = 10;
@@ -24,6 +27,7 @@ public class Board extends JPanel implements ActionListener {
     private final int RAND_POS = 29;
     private final int DELAY = 140;
 
+    // Creates arrays for x and y coordinates.
     private final int x[] = new int[ALL_DOTS];
     private final int y[] = new int[ALL_DOTS];
 
@@ -32,6 +36,7 @@ public class Board extends JPanel implements ActionListener {
     private int apple_x;
     private int apple_y;
 
+    // Declares booleans and variables for in game states and actions.
     private boolean leftDirection = false;
     private boolean rightDirection = false;
     private boolean upDirection = false;
@@ -43,11 +48,13 @@ public class Board extends JPanel implements ActionListener {
     private Image apple;
     private Image head;
 
+    // Calls the main class and initializes the function to create the play Window.
     public Board() {
         
         initBoard();
     }
     
+    // Function to create playing field / window.
     private void initBoard() {
 
         addKeyListener(new TAdapter());
@@ -59,6 +66,7 @@ public class Board extends JPanel implements ActionListener {
         initGame();
     }
 
+    // Function to call the images used inside the game.
     private void loadImages() {
 
         ImageIcon iid = new ImageIcon("src/resources/dot.png");
@@ -71,6 +79,7 @@ public class Board extends JPanel implements ActionListener {
         head = iih.getImage();
     }
 
+    // Function to plot the items / images used in the game. 
     private void initGame() {
 
         dots = 3;
@@ -87,15 +96,15 @@ public class Board extends JPanel implements ActionListener {
         timer.start();
     }
 
-    @Override
+    // Function to paint the components to the frame.
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
         doDrawing(g);
     }
     
+    // Function to constantly move plotted images within window.
     private void doDrawing(Graphics g) {
-        
         if (inGame) {
 
             g.drawImage(apple, apple_x, apple_y, this);
@@ -116,8 +125,8 @@ public class Board extends JPanel implements ActionListener {
         }        
     }
 
+    // Function to display the "Game Over" frame.
     private void gameOver(Graphics g) {
-        
         String msg = "Game Over";
         Font small = new Font("TimesRoman", Font.BOLD, 25);
         FontMetrics metr = getFontMetrics(small);
@@ -127,8 +136,8 @@ public class Board extends JPanel implements ActionListener {
         g.drawString(msg, (B_WIDTH - metr.stringWidth(msg)) / 2, B_HEIGHT / 2);
     }
     
+    // Function to keep score as player progresses.
     private void scoreKeep(Graphics g) {
-    	
     	String msg = Integer.toString(score);
         Font small = new Font("TimesRoman", Font.BOLD, 10);
         FontMetrics metr = getFontMetrics(small);
@@ -138,8 +147,8 @@ public class Board extends JPanel implements ActionListener {
         g.drawString(msg, 146 , 13);
     }
 
+    // Function to check whether apple was found and adds to snakes body if true.
     private void checkApple() {
-
         if ((x[0] == apple_x) && (y[0] == apple_y)) {
 
             dots++;
@@ -148,8 +157,8 @@ public class Board extends JPanel implements ActionListener {
         }
     }
 
+    // Function to create move set with assigned directions.
     private void move() {
-
         for (int z = dots; z > 0; z--) {
             x[z] = x[(z - 1)];
             y[z] = y[(z - 1)];
@@ -172,8 +181,8 @@ public class Board extends JPanel implements ActionListener {
         }
     }
 
+    // Function to test whether the object collides with the side and end the game if true.
     private void checkCollision() {
-
         for (int z = dots; z > 0; z--) {
 
             if ((z > 4) && (x[0] == x[z]) && (y[0] == y[z])) {
@@ -202,6 +211,7 @@ public class Board extends JPanel implements ActionListener {
         }
     }
 
+    // Function to plot the apples location on random locations within the window.
     private void locateApple() {
 
         int r = (int) (Math.random() * RAND_POS);
@@ -211,9 +221,8 @@ public class Board extends JPanel implements ActionListener {
         apple_y = ((r * DOT_SIZE));
     }
 
-    @Override
+    // Function to act as an event handler to call multiple functions while in game.
     public void actionPerformed(ActionEvent e) {
-
         if (inGame) {
 
             checkApple();
@@ -224,9 +233,9 @@ public class Board extends JPanel implements ActionListener {
         repaint();
     }
 
+    // Calls the KeyAdapter package to handle directional key inputs and apply their 
+    // respective directional functions.
     private class TAdapter extends KeyAdapter {
-
-        @Override
         public void keyPressed(KeyEvent e) {
 
             int key = e.getKeyCode();
